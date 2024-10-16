@@ -631,6 +631,26 @@ var commands = map[string]*Command{
 			return car.SetSentryMode(ctx, state)
 		},
 	},
+	"guest-mode": &Command{
+		help:             "Set guest mode to STATE ('enable' or 'disable')",
+		requiresAuth:     true,
+		requiresFleetAPI: false,
+		args: []Argument{
+			Argument{name: "STATE", help: "'enable' or 'disable'"},
+		},
+		handler: func(ctx context.Context, acct *account.Account, car *vehicle.Vehicle, args map[string]string) error {
+			var state bool
+			switch args["STATE"] {
+			case "enable":
+				state = true
+			case "disable":
+				state = false
+			default:
+				return fmt.Errorf("guest mode state must be 'enable' or 'disable'")
+			}
+			return car.SetGuestMode(ctx, state)
+		},
+	},
 	"wake": &Command{
 		help:             "Wake up vehicle",
 		requiresAuth:     false,
